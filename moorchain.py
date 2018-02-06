@@ -1,6 +1,48 @@
 #!/bin/env python
-import inout
 import math
+
+#update 07-Feb-2017: added calc equiv. dia element (cylinder); removed inout reference
+
+def get_integer(message, default):
+#get integer number - error check included
+	try:
+		f=input (message)
+		st=type(f)
+		if f==0:
+			f=default
+			return int(f)
+		elif f==" ":
+			f=default
+			return int(f)
+		else:
+			return int(f)
+	except:
+		print("Wrong Input! Try again")
+		return(get_integer(message, default))
+        
+def get_float(message, default):
+#get float number - error check included
+	try:
+		f=input (message)
+		st=type(f)
+		if f==0:
+			f=default
+			return float(f) ##dodo
+		elif f==" ":
+			f=default
+			return float(f)  ##dodo
+		else:
+			return float(f)
+	except:
+		print("Wrong Input! Try again")
+		return(get_float(message, default))
+
+def write_file (file, description, var):
+#write to file
+	file.write ("\n")
+	file.write (str(description))
+	file.write ("\t")
+	file.write (str(var))
 
 def BL(c):
 	BL=c*Dmm**2*(44-0.08*Dmm)
@@ -11,11 +53,11 @@ def VL(a):
 
 print("Calculating Properties of Mooring Chain")
 print("Use results as preliminary data, only! Wherever possible use manufacturer's data instead.")
-Dmm=inout.get_float("Input Diameter of chain link in mm or '0' for default of 90mm: ", 90.0)
+Dmm=get_float("Input Diameter of chain link in mm or '0' for default of 90mm: ", 90.0)
 D=Dmm/1000
 print("1 - Studless Chain")
 print("2 - Studlink Chain")
-choice1=inout.get_integer("Choose option 1 or 2: ", 1)
+choice1=get_integer("Choose option 1 or 2: ", 1)
 if choice1==1:
 	print ("Calculating properties of Studless Chain")
 	#Outer Diameter
@@ -79,47 +121,51 @@ if choice1==1:
 	EEMR4=(5.45-0.0025*Dmm)*10**7
 	# R5 chain
 	EEMR5=(6.0-0.0033*Dmm)*10**7
+	# calculating equivalent element dia - cylinder of equal volume
+	eDia = (4*ML/(math.pi*7.8*1))**0.5
 	#locker volume in cum per m of chain
 	locker=VL(Dmm)
 	#writing results-studless chain
 	fname="studless.txt"
 	fn=open(fname, 'a')
-	inout.write_file(fn, "Link Diameter of Studless Chain [mm]: ", Dmm)
-	inout.write_file(fn, "Outer Diameter [mm]: ", ODmm)
-	inout.write_file(fn, "Contact Diameter [mm]: ", CDmm)
-	inout.write_file(fn, "Mass per unit length [t/m]: ", ML)
-	inout.write_file(fn, "Submerged weight of chain [t/m]: ", SW)
-	inout.write_file(fn, "Axial Stiffness [kN]: ", AS)
-	inout.write_file(fn, "Bending Stiffness [kN*sqm]: ", BS)
-	inout.write_file(fn, "Normal Drag Coefficient: ", NDC)
-	inout.write_file(fn, "Normal Drag Diameter [mm]: ", NDD)
-	inout.write_file(fn, "Axial Drag Coefficient: ",ADC)
-	inout.write_file(fn, "Axial Drag Diameter [mm]: ", ADD)
-	inout.write_file(fn, "Normal Added mass Coeff: ", NAMC)
-	inout.write_file(fn, "Axial Added mass Coeff: ", AADMC)
+	write_file(fn, "Link Diameter of Studless Chain [mm]: ", Dmm)
+	write_file(fn, "Outer Diameter [mm]: ", ODmm)
+	write_file(fn, "Contact Diameter [mm]: ", CDmm)
+	write_file(fn, "Mass per unit length [t/m]: ", ML)
+	write_file(fn, "Submerged weight of chain [t/m]: ", SW)
+	write_file(fn, "Axial Stiffness [kN]: ", AS)
+	write_file(fn, "Bending Stiffness [kN*sqm]: ", BS)
+	write_file(fn, "Normal Drag Coefficient: ", NDC)
+	write_file(fn, "Normal Drag Diameter [mm]: ", NDD)
+	write_file(fn, "Axial Drag Coefficient: ",ADC)
+	write_file(fn, "Axial Drag Diameter [mm]: ", ADD)
+	write_file(fn, "Normal Added mass Coeff: ", NAMC)
+	write_file(fn, "Axial Added mass Coeff: ", AADMC)
 	fn.write("\n")
-	inout.write_file(fn, "Breaking Load - ORQ Chain [kN]: ", BLORQ)
-	inout.write_file(fn, "Breaking Load - R3 Chain [kN]: ", BLR3)
-	inout.write_file(fn, "Breaking Load - R3S Chain [kN]: ", BLR3S)
-	inout.write_file(fn, "Breaking Load - R4 Chain [kN]: ", BLR4)
-	inout.write_file(fn, "Breaking Load - R4S Chain [kN]: ", BLR4S)
-	inout.write_file(fn, "Breaking Load - R5 Chain [kN]: ", BLR5)
+	write_file(fn, "Breaking Load - ORQ Chain [kN]: ", BLORQ)
+	write_file(fn, "Breaking Load - R3 Chain [kN]: ", BLR3)
+	write_file(fn, "Breaking Load - R3S Chain [kN]: ", BLR3S)
+	write_file(fn, "Breaking Load - R4 Chain [kN]: ", BLR4)
+	write_file(fn, "Breaking Load - R4S Chain [kN]: ", BLR4S)
+	write_file(fn, "Breaking Load - R5 Chain [kN]: ", BLR5)
 	fn.write("\n")
-	inout.write_file(fn, "Proof Load - ORQ Chain [kN]: ", PLORQ)
-	inout.write_file(fn, "Proof Load - R3 Chain [kN]: ", PLR3)
-	inout.write_file(fn, "Proof Load - R3S Chain [kN]: ", PLR3S)
-	inout.write_file(fn, "Proof Load - R4 Chain [kN]: ", PLR4)
-	inout.write_file(fn, "Proof Load - R4S Chain [kN]: ", PLR4S)
-	inout.write_file(fn, "Proof Load - R5 Chain [kN]: ", PLR5)
+	write_file(fn, "Proof Load - ORQ Chain [kN]: ", PLORQ)
+	write_file(fn, "Proof Load - R3 Chain [kN]: ", PLR3)
+	write_file(fn, "Proof Load - R3S Chain [kN]: ", PLR3S)
+	write_file(fn, "Proof Load - R4 Chain [kN]: ", PLR4)
+	write_file(fn, "Proof Load - R4S Chain [kN]: ", PLR4S)
+	write_file(fn, "Proof Load - R5 Chain [kN]: ", PLR5)
 	fn.write("\n")
-	inout.write_file(fn, "Effective Elastic Modulus - R3 Chain [kN/sqm]: ", EEMR3)
-	inout.write_file(fn, "Effective Elastic Modulus - R4 Chain [kN/sqm]: ", EEMR4)
-	inout.write_file(fn, "Effective Elastic Modulus - R5 Chain [kN/sqm]: ", EEMR5)
+	write_file(fn, "Effective Elastic Modulus - R3 Chain [kN/sqm]: ", EEMR3)
+	write_file(fn, "Effective Elastic Modulus - R4 Chain [kN/sqm]: ", EEMR4)
+	write_file(fn, "Effective Elastic Modulus - R5 Chain [kN/sqm]: ", EEMR5)
 	fn.write("\n")
-	inout.write_file(fn, "Allowable maximum twist of 90-foot (27.432m) length of chain [deg]: ", twist)
-	inout.write_file(fn, "Allowable maximum twist of 90-foot (27.432m) length of chain in 360deg turns: ", twist360)
+	write_file(fn, "Allowable maximum twist of 90-foot (27.432m) length of chain [deg]: ", twist)
+	write_file(fn, "Allowable maximum twist of 90-foot (27.432m) length of chain in 360deg turns: ", twist360)
 	fn.write("\n")
-	inout.write_file(fn, "Chain locker volume for 1m of Chain [cum]: ", locker)
+	write_file(fn, "Equivalent element Dia [m]", eDia)
+	fn.write("\n")
+	write_file(fn, "Chain locker volume for 1m of Chain [cum]: ", locker)
 	fn.write("\n")
 	fn.write("\n")
 	fn.close()
@@ -183,43 +229,47 @@ elif choice1==2:
 	EEM=5.6*10**7
 	#locker volume in cum per m of chain
 	locker=VL(Dmm)
+	# calculating equivalent element dia - cylinder of equal volume
+	eDia = (4*ML/(math.pi*7.8*1))**0.5
 	#writing results- stud chain
 	fname="studlink.txt"
 	fn=open(fname, 'a')
-	inout.write_file(fn, "Link Diameter of Studlink Chain [mm]: ", Dmm)
-	inout.write_file(fn, "Outer Diameter [mm]: ", ODmm)
-	inout.write_file(fn, "Contact Diameter [mm]: ", CDmm)
-	inout.write_file(fn, "Mass per unit length [t/m]: ", ML)
-	inout.write_file(fn, "Submerged weight of chain [t/m]: ", SW)
-	inout.write_file(fn, "Axial Stiffness [kN]: ", AS)
-	inout.write_file(fn, "Bending Stiffness [kN*sqm]: ", BS)
-	inout.write_file(fn, "Normal Drag Coefficient: ", NDC)
-	inout.write_file(fn, "Normal Drag Diameter [mm]: ", NDD)
-	inout.write_file(fn, "Axial Drag Coefficient: ",ADC)
-	inout.write_file(fn, "Axial Drag Diameter [mm]: ", ADD)
-	inout.write_file(fn, "Normal Added mass Coeff: ", NAMC)
-	inout.write_file(fn, "Axial Added mass Coeff: ", AADMC)
+	write_file(fn, "Link Diameter of Studlink Chain [mm]: ", Dmm)
+	write_file(fn, "Outer Diameter [mm]: ", ODmm)
+	write_file(fn, "Contact Diameter [mm]: ", CDmm)
+	write_file(fn, "Mass per unit length [t/m]: ", ML)
+	write_file(fn, "Submerged weight of chain [t/m]: ", SW)
+	write_file(fn, "Axial Stiffness [kN]: ", AS)
+	write_file(fn, "Bending Stiffness [kN*sqm]: ", BS)
+	write_file(fn, "Normal Drag Coefficient: ", NDC)
+	write_file(fn, "Normal Drag Diameter [mm]: ", NDD)
+	write_file(fn, "Axial Drag Coefficient: ",ADC)
+	write_file(fn, "Axial Drag Diameter [mm]: ", ADD)
+	write_file(fn, "Normal Added mass Coeff: ", NAMC)
+	write_file(fn, "Axial Added mass Coeff: ", AADMC)
 	fn.write("\n")
-	inout.write_file(fn, "Breaking Load - ORQ Chain [kN]: ", BLORQ)
-	inout.write_file(fn, "Breaking Load - R3 Chain [kN]: ", BLR3)
-	inout.write_file(fn, "Breaking Load - R3S Chain [kN]: ", BLR3S)
-	inout.write_file(fn, "Breaking Load - R4 Chain [kN]: ", BLR4)
-	inout.write_file(fn, "Breaking Load - R4S Chain [kN]: ", BLR4S)
-	inout.write_file(fn, "Breaking Load - R5 Chain [kN]: ", BLR5)
+	write_file(fn, "Breaking Load - ORQ Chain [kN]: ", BLORQ)
+	write_file(fn, "Breaking Load - R3 Chain [kN]: ", BLR3)
+	write_file(fn, "Breaking Load - R3S Chain [kN]: ", BLR3S)
+	write_file(fn, "Breaking Load - R4 Chain [kN]: ", BLR4)
+	write_file(fn, "Breaking Load - R4S Chain [kN]: ", BLR4S)
+	write_file(fn, "Breaking Load - R5 Chain [kN]: ", BLR5)
 	fn.write("\n")
-	inout.write_file(fn, "Proof Load - ORQ Chain [kN]: ", PLORQ)
-	inout.write_file(fn, "Proof Load - R3 Chain [kN]: ", PLR3)
-	inout.write_file(fn, "Proof Load - R3S Chain [kN]: ", PLR3S)
-	inout.write_file(fn, "Proof Load - R4 Chain [kN]: ", PLR4)
-	inout.write_file(fn, "Proof Load - R4S Chain [kN]: ", PLR4S)
-	inout.write_file(fn, "Proof Load - R5 Chain [kN]: ", PLR5)
+	write_file(fn, "Proof Load - ORQ Chain [kN]: ", PLORQ)
+	write_file(fn, "Proof Load - R3 Chain [kN]: ", PLR3)
+	write_file(fn, "Proof Load - R3S Chain [kN]: ", PLR3S)
+	write_file(fn, "Proof Load - R4 Chain [kN]: ", PLR4)
+	write_file(fn, "Proof Load - R4S Chain [kN]: ", PLR4S)
+	write_file(fn, "Proof Load - R5 Chain [kN]: ", PLR5)
 	fn.write("\n")
-	inout.write_file(fn, "Effective Elastic Modulus - all grades of studlink chain [kn/sqm]: ", EEM)
+	write_file(fn, "Effective Elastic Modulus - all grades of studlink chain [kn/sqm]: ", EEM)
 	fn.write("\n")
-	inout.write_file(fn, "Allowable maximum twist of 90-foot (27.432m) length of chain [deg]: ", twist)
-	inout.write_file(fn, "Allowable maximum twist of 90-foot (27.432m) length of chain in 360deg turns: ", twist360)
+	write_file(fn, "Allowable maximum twist of 90-foot (27.432m) length of chain [deg]: ", twist)
+	write_file(fn, "Allowable maximum twist of 90-foot (27.432m) length of chain in 360deg turns: ", twist360)
 	fn.write("\n")
-	inout.write_file(fn, "Chain locker volume for 1m of Chain [cum]: ", locker)
+	write_file(fn, "Equivalent element Dia [m]", eDia)
+	fn.write("\n")
+	write_file(fn, "Chain locker volume for 1m of Chain [cum]: ", locker)
 	fn.write("\n")
 	fn.write("\n")
 	fn.close()
